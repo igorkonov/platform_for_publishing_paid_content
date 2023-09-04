@@ -2,16 +2,18 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
 
 from blog.forms import BlogForm
 from blog.models import Blog
 
-
+class HomePageView(TemplateView):
+    template_name = 'blog/home.html'
 # Обобщенное представление для просмотра списка объектов модели Blog
 class BlogListView(ListView):
     model = Blog
     queryset = Blog.objects.filter(published_on=True)
+    template_name = 'blog_list.html'
 
 
 # Обобщенное представление для создания нового объекта модели Blog
