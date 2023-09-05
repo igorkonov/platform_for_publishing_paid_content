@@ -14,7 +14,7 @@ class Blog(models.Model):
     image = models.ImageField(upload_to='blog/', **NULLABLE, verbose_name='Изображение')
     created_date = models.DateField(auto_now_add=True, verbose_name='Дата публикации')
     views = models.IntegerField(verbose_name='Количество просмотров', default=0, **NULLABLE)
-    published_on = models.BooleanField(default=False, verbose_name='Дата публикации')
+    published_on = models.BooleanField(default=False, verbose_name='Признак публикации')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE,
                              verbose_name='Автор контента')
     price = models.IntegerField(default=0, verbose_name='Стоимость подписки')

@@ -7,8 +7,15 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from blog.forms import BlogForm
 from blog.models import Blog
 
+
 class HomePageView(TemplateView):
     template_name = 'blog/home.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['blog'] = Blog.objects.all().order_by('?')[:3]
+        return context_data
+
 # Обобщенное представление для просмотра списка объектов модели Blog
 class BlogListView(ListView):
     model = Blog
@@ -22,6 +29,9 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     form_class = BlogForm
     success_url = reverse_lazy('blog:blog_list')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user  # Установите текущего пользователя как автора записи
+        return super().form_valid(form)
 
 # Обобщенное представление для просмотра деталей объекта модели Blog
 class BlogDetailView(LoginRequiredMixin, DetailView):

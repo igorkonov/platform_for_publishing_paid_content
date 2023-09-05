@@ -15,7 +15,7 @@ class BlogForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Blog
         fields = '__all__'
-        exclude = ('slug', 'views', 'comment')
+        exclude = ('slug', 'views', 'user', 'comment')
 
 
 class BlogAdminForm(forms.ModelForm):
