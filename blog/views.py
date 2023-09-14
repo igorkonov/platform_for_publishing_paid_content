@@ -6,6 +6,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 
 from blog.forms import BlogForm
 from blog.models import Blog
+from subscriptions.models import Subscription
 
 
 class HomePageView(TemplateView):
@@ -14,13 +15,46 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['blog'] = Blog.objects.all().order_by('?')[:3]
+
+        if self.request.user.is_authenticated:
+            user = self.request.user
+
+            # Get a list of blog IDs that the user has subscribed to
+            subscribed_blog_ids = Subscription.objects.filter(user=user, status=True).values_list('blog__id', flat=True)
+
+            # Get blogs that the user has not subscribed to
+            unsubscribed_blogs = Blog.objects.filter(published_on=True).exclude(id__in=subscribed_blog_ids)
+
+            # Get blogs that the user is subscribed to
+            subscribed_blogs = Blog.objects.filter(id__in=subscribed_blog_ids, published_on=True)
+
+            context_data['unsubscribed_blogs'] = unsubscribed_blogs
+            context_data['subscribed_blogs'] = subscribed_blogs
+
         return context_data
+
 
 # Обобщенное представление для просмотра списка объектов модели Blog
 class BlogListView(ListView):
     model = Blog
-    queryset = Blog.objects.filter(published_on=True)
     template_name = 'blog_list.html'
+
+    def get_queryset(self):
+        # Get the user object
+        user = self.request.user
+
+        # Get a list of blog IDs that the user has subscribed to
+        subscribed_blog_ids = Subscription.objects.filter(user=user, status=True).values_list('blog__id', flat=True)
+
+        # Get blogs that the user has not subscribed to and is not the author
+        unsubscribed_blogs = Blog.objects.filter(published_on=True).exclude(id__in=subscribed_blog_ids).exclude(user=user)
+
+        return unsubscribed_blogs
+
+
+
+
+
 
 
 # Обобщенное представление для создания нового объекта модели Blog
@@ -30,8 +64,12 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('blog:blog_list')
 
     def form_valid(self, form):
-        form.instance.user = self.request.user  # Установите текущего пользователя как автора записи
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            self.object.user = self.request.user
+            self.object.save()
         return super().form_valid(form)
+
 
 # Обобщенное представление для просмотра деталей объекта модели Blog
 class BlogDetailView(LoginRequiredMixin, DetailView):

@@ -1,0 +1,38 @@
+
+{% extends 'blog/base.html' %}
+{% block content %}
+  <div style="display: flex; flex-direction: column; align-items: center; margin: 0 auto;"><h2 class="active">
+    Мы ценим ваш бизнес! Если у Вас возникли вопросы, пожалуйста, пишите на электронную почту</h2>
+      <div class="form-group text-center">
+    <a class="btn btn-outline-link" href="mailto:garik.konoff@yandex.ru">garik.konoff@yandex.ru</a>
+         </div>
+  <a class="btn btn-dark" href="{% url 'blog:home' %}">Вернуться на главную</a>
+  </div>
+ <style>
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 2px 4px rgba(0, 0, 0, 0.3);
+            width: 100%;
+
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+
+{% endblock %}

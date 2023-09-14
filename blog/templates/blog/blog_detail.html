@@ -11,18 +11,18 @@
                 <h5 class="card-title">{{ object.description }}</h5>
                 <img src="{% mediapath object.image %}" class="card-img-top mx-auto d-block img-fluid" alt=""
                      style="width: auto; height: auto;">
-                <p class="card-text">Просмотры: {{ object.views }}</p>
-                {% if perms.blog.change_blog %}
+                <p class="card-text">Просмотры: {{object.views}}</p>
+                {% if object.user == user %}
                     <a href="{% url 'blog:blog_update' object.slug %}" class="btn btn-warning">Изменить
                         запись</a>
                 {% endif %}
-                {% if perms.blog.delete_blog %}
+                {% if object.user == user %}
                     <a href="{% url 'blog:blog_delete' object.slug %}" class="btn btn-danger">Удалить
                         запись</a>
                 {% endif %}
                 <br><br>
                 <a href="{% url 'blog:blog_list' %}" class="btn btn-secondary">Все записи</a>
-                {% if perms.blog.set_published_blog %}
+                {% if object.user == user %}
                     {% if object.published_on == True %}
                         <a href="{% url 'blog:toggle_activity' object.slug %}" class="btn btn-outline-danger">Снять с
                             публикации</a>

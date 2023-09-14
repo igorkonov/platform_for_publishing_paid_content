@@ -1,0 +1,39 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Подтверждение отмены подписки</h2>
+    <p>Вы уверены, что хотите отменить подписку на блог "{{ subscription.blog.title }}"?</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Да, отменить подписку</button>
+      <a href="{% url 'blog:home' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+  </div>
+ <style>
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 2px 4px rgba(0, 0, 0, 0.3);
+            width: 100%;
+
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+{% endblock %}

@@ -1,59 +1,74 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    {% load tags %}
+{% load tags %}
 
-    <div class="card flex-md-row mb-4 box-shadow h-md-250">
-        <div class="card-body d-flex flex-column align-items-start">
-            <div class="card-subtitle mb-auto">
+<div class="container" style="text-align: center">
+    {% if user.is_authenticated %}
+    <a href="{% url 'blog:blog_create' %}" class="btn btn-outline-secondary btn-lg my-3"
+       style="border-radius: 25px; padding: 10px 25px; font-size: 20px; font-weight: bold;">
+        Создать запись
+    </a>
+    {% endif %}
+</div>
+<div class="card flex-md-row mb-4 box-shadow h-md-250">
+    <div class="card-body d-flex flex-column align-items-start">
+        <div class="card-subtitle mb-auto" id="blog-list">
             {% for object in object_list %}
-                {% if object.published_on %}
-                    <tr>
-
-                       <h3 class="mb-0">
+            {% if object.published_on %}
+            {% if user.is_authenticated %}
+            <h3 class="mb-0 text-center">
                 <a class="text-dark" href="#">{{ object.title }}</a>
             </h3>
-                        <td class="text-center">{{ object.description|truncatechars:100 }}</td>
-                        <td class="text-center">
-                            <img src="{% mediapath object.image %}" class="rounded mx-auto d-block" alt=""
-                                 height="100">
-                        </td>
-                        <td style="text-align: center">{{ object.views }}</td>
+            {% endif %}
+            <p class="card-text text-center mb-auto">{{ object.description | truncatechars:100 }}</p>
+            {% if user.is_authenticated %}
 
-                        <td>
-                            <a href="{% url 'blog:blog_detail' object.slug %}" class="btn btn-info btn-sm">Перейти
-                                к записи</a>
-                        </td>
-                    </tr>
+            <div style="filter: blur(50px);">
+                <img src="{% mediapath object.image %}"
+                     class="card-img-top mx-auto d-block img-fluid" alt=""
+                     style="width: auto; height: auto;">
+            </div>
+
+            {% endif %}
+
+            <h3 style="text-align: center">Просмотры: {{object.views}}</h3>
+
+            <p class="card-text text-center">
+                {% if user.is_authenticated %}
+                {% if object.is_paid or object.price > 0 %}
+                <a href="{% url 'subscriptions:create-checkout-session' object.slug %}" class="btn btn-success btn-sm">Подписаться
+                    {{ object.price }} $</a>
+                {% else %}
+                <a href="{% url 'subscriptions:create-checkout-session' object.slug %}" class="btn btn-success btn-sm">Подписаться</a>
                 {% endif %}
+                {% endif %}
+            </p>
+
+            {% endif %}
             {% endfor %}
-            </tbody>
-        </table>
-        <div class="container" style="text-align: center">
-            {% if user.is_superuser or perms.blog.add_blog %}
-            <a href="{% url 'blog:blog_create' %}" class="btn btn-outline-secondary btn-lg my-3"
-               style="border-radius: 25px; padding: 10px 25px; font-size: 20px; font-weight: bold;">
-                Создать запись
-            </a>
-             {% endif %}
         </div>
+
     </div>
-    <style>
-        .btn {
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
+</div>
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        }
+<style>
+    .btn {
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
 
-        .btn:active {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-    </style>
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+</style>
+
 {% endblock %}

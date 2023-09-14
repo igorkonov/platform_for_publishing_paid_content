@@ -34,7 +34,6 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = models.CharField(max_length=50, unique=True, **NULLABLE, verbose_name='Никнейм')
-    email = models.EmailField(verbose_name='Почта', unique=True, **NULLABLE)
     phone = models.CharField(max_length=25, unique=True, verbose_name='Номер телефона')
     avatar = models.ImageField(upload_to='users/', verbose_name='Аватар', **NULLABLE)
 

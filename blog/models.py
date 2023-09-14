@@ -18,6 +18,7 @@ class Blog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE,
                              verbose_name='Автор контента')
     price = models.IntegerField(default=0, verbose_name='Стоимость подписки')
+    is_paid = models.BooleanField(default=False, verbose_name='Платный контент')
     comment = models.TextField(verbose_name='Комментарий')
 
     class Meta:
@@ -39,3 +40,6 @@ class Blog(models.Model):
             transliterated_title = translit(self.title, 'ru', reversed=True)
             self.slug = slugify(transliterated_title, allow_unicode=True)
         super().save(*args, **kwargs)
+
+    def get_display_price(self):
+        return "{0:.2f}".format(self.price / 100)

@@ -14,7 +14,6 @@ class UserCreationForm(forms.ModelForm):
         model = User
         fields = (
             'username',
-            'email',
             'phone',
             'avatar',
         )
@@ -37,21 +36,21 @@ class UserCreationForm(forms.ModelForm):
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('username', 'email', 'phone', 'avatar',)
+    list_display = ('username', 'phone', 'avatar',)
     fieldsets = (
         (None, {'fields': (
-            'password', 'username', 'email', 'phone', 'avatar')}),
+            'password', 'username', 'phone', 'avatar')}),
         ('Права доступа', {'fields': ('is_superuser', 'is_staff', 'is_active', 'user_permissions')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': (
-                'password', 'confirm_password', 'username',
-                'email', 'phone', 'avatar',)}),
+                'password', 'confirm_password', 'username', 'phone', 'avatar',)}),
+
         ('Права доступа', {'fields': ('is_superuser', 'is_staff', 'is_active', 'user_permissions')}),
     )
-    search_fields = ('username', 'email', 'phone',)
+    search_fields = ('username', 'phone',)
     ordering = ('id', 'phone',)
     filter_horizontal = ()
 

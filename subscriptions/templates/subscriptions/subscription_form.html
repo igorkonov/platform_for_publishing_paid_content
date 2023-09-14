@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Подписка на блог</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Подписаться</button>
+    </form>
+  </div>
+{% endblock %}
