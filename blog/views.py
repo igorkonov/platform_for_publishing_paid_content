@@ -14,7 +14,7 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['blog'] = Blog.objects.all().order_by('?')[:3]
+        context_data['blog'] = Blog.objects.filter(published_on=True).order_by('?')[:3]
 
         if self.request.user.is_authenticated:
             user = self.request.user
@@ -97,8 +97,6 @@ class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Blog
     success_url = reverse_lazy('blog:blog_list')
 
-
-@permission_required('blog.set_published_blog')
 def toggle_activity(request, slug):
     record_item = get_object_or_404(Blog, slug=slug)
     record_item.toggle_published()

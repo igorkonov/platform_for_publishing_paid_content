@@ -19,11 +19,11 @@
     <div class="container">
         <div class="row">
             {% for item in blog %}
+            {% if item.published_on %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-
                     <h3 class="card-header bg-dark">
-                        {% if item in subscribed_blogs %}
+                        {% if item in subscribed_blogs or item.user == user %}
                         <a href="{% url 'blog:blog_detail' item.slug %}"
                            style="color: white; margin: 0;">{{item.title}}</a>
                         {% else %}
@@ -34,35 +34,37 @@
 
                     <div class="card-body">
                         <h5 class="card-title">{{ item.description | truncatechars:100 }}</h5>
-                        {% if user.is_authenticated %}
-                        {% if item in subscribed_blogs or item.user == user%}
+
+                        {% if user.is_authenticated and item in subscribed_blogs or item.user == user %}
                         <img src="{% mediapath item.image %}"
                              class="card-img-top mx-auto d-block img-fluid" alt=""
                              style="width: auto; height: auto;">
                         {% else %}
-                        <!-- User is authenticated, subscribed, but not the author, display the image with blur -->
                         <div style="filter: blur(30px);">
                             <img src="{% mediapath item.image %}"
                                  class="card-img-top mx-auto d-block img-fluid" alt=""
                                  style="width: auto; height: auto;">
                         </div>
-                        {% endif %}
+
                         {% endif %}
 
+
                         <h1 class="card-title pricing-card-title">{{ item.price }} $.</h1>
-                        {% if user.is_authenticated and item.user != user%}
-                            {% if item in subscribed_blogs %}
-                                <a href="{% url 'subscriptions:subscription_delete' item.slug %}" class="btn btn-danger btn-sm">Отписаться</a>
-                            {% elif item in unsubscribed_blogs %}
-                            {% if item.is_paid or item.price > 0 %}
-                                <form action="{% url 'subscriptions:create-checkout-session' item.slug %}" method="post">
-                                    {% csrf_token %}
-                                <input type="submit" class="btn btn-success btn-sm" value="Подписаться {{ item.price }} $"></form>
-                            {% else %}
-                                <a href="{% url 'subscriptions:create-checkout-session' item.slug %}"
-                                class="btn btn-success btn-sm">Подписаться</a>
+                        {% if user.is_authenticated %}
+                            {% if item.user != user %}
+                                {% if item in subscribed_blogs %}
+                                    <a href="{% url 'subscriptions:subscription_delete' item.slug %}" class="btn btn-danger btn-sm">Отписаться</a>
+                                {% elif item in unsubscribed_blogs %}
+                                    {% if item.is_paid or item.price > 0 %}
+                                        <form action="{% url 'subscriptions:create-checkout-session' item.slug %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="submit" class="btn btn-success btn-sm" value="Подписаться {{ item.price }} $">
+                                        </form>
+                                    {% else %}
+                                        <a href="{% url 'subscriptions:subscription_create' item.slug %}" class="btn btn-success btn-sm">Подписаться</a>
+                                    {% endif %}
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
                         {% endif %}
 
 
@@ -72,8 +74,10 @@
                             <li><p class="card-text">Дата публикации: {{ item.created_date }}</p></li>
                         </ul>
                     </div>
+
                 </div>
             </div>
+            {% endif %}
             {% endfor %}
         </div>
     </div>

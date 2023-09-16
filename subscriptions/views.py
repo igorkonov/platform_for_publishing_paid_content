@@ -10,8 +10,9 @@ from django.utils import timezone
 
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import DeleteView, ListView, TemplateView
+from django.views.generic import DeleteView, ListView, TemplateView, CreateView
 from blog.models import Blog
+from subscriptions.forms import SubscriptionForm
 
 from subscriptions.models import Subscription
 from users.models import User
@@ -62,7 +63,25 @@ class CreateCheckoutSessionView(View):
             return JsonResponse({'error': str(e)})
 
         return redirect(checkout_session.url, code=303)
+class SubscriptionCreateView(CreateView):
+    model = Subscription
+    template_name = 'subscriptions/subscription_form.html'
+    success_url = reverse_lazy('blog:home')
+    form_class = SubscriptionForm
+    def form_valid(self, form):
+        # Получаем блог на основе slug из URL
+        blog = get_object_or_404(Blog, slug=self.kwargs['slug'])
 
+        # Создаем подписку
+        form.create_subscription(self.request.user, blog)
+
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        blog = get_object_or_404(Blog, slug=self.kwargs['slug'])
+        context['blog'] = blog
+        return context
 
 class SubscriptionDeleteView(DeleteView):
     model = Subscription
@@ -70,8 +89,9 @@ class SubscriptionDeleteView(DeleteView):
     success_url = reverse_lazy('blog:home')
 
     def get_queryset(self):
-        # Фильтруем подписки, чтобы пользователь мог отменить только свою подписку
         return Subscription.objects.filter(user=self.request.user)
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.get_queryset(), blog__slug=self.kwargs['slug'])
 
 
 class SubscriptionListView(ListView):
@@ -79,22 +99,19 @@ class SubscriptionListView(ListView):
     template_name = 'subscriptions/subscription_list.html'  # Создайте шаблон для списка подписок
 
     def get_queryset(self):
-        # Get the user object
         user = self.request.user
 
-        # Get a list of blog IDs that the user has subscribed to
         subscribed_blog_ids = Subscription.objects.filter(user=user, status=True).values_list('blog__id', flat=True)
-
-        # Get the blogs associated with the subscriptions
         subscribed_blogs = Blog.objects.filter(id__in=subscribed_blog_ids, published_on=True)
 
-        # Get the user's own blogs
         user_blogs = Blog.objects.filter(user=user, published_on=True)
 
-        # Combine the two querysets
-        combined_blogs = user_blogs | subscribed_blogs
+        # Add this line to include unpublished blogs for the owner
+        user_unpublished_blogs = Blog.objects.filter(user=user, published_on=False)
 
-        return combined_blogs.distinct()
+        combined_blogs = (user_blogs | subscribed_blogs | user_unpublished_blogs).distinct()
+
+        return combined_blogs
 
 class CancelView(TemplateView):
     template_name = 'subscriptions/cancel.html'
