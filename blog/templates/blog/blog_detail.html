@@ -12,6 +12,32 @@
                 <img src="{% mediapath object.image %}" class="card-img-top mx-auto d-block img-fluid" alt=""
                      style="width: auto; height: auto;">
                 <p class="card-text">Просмотры: {{object.views}}</p>
+
+
+                    <h3>Комментарии</h3>
+                <div class="comment-section">
+                    <div class="comments-container">
+                            {% for comment in comments %}
+                            <div class="comment">
+                                <h5 class="card-title">
+                                    {% if comment.user.avatar %}
+                                        <img src="{{ comment.user.avatar.url }}" alt="Avatar" style="width: 30px; height: 30px; border-radius: 50%;">
+                                    {% endif %}
+                                    ({{ comment.user }})
+                                </h5>
+                                <h6>{{ comment.comment }}</h6>
+                                <p>{{ comment.created_date|date:"F d, Y H:i" }}</p>
+                            </div>
+                            {% endfor %}
+                    </div>
+                 </div>
+                    <form method="post" enctype="multipart/form-data" class="comment-form">
+                        {% csrf_token %}
+                        <textarea name="comment" rows="4" cols="50" class="comment-input" placeholder="Напишите комментарий"></textarea>
+                        <button class="btn btn-info" type="submit">Оставить комментарий</button>
+                    </form>
+
+
                 {% if object.user == user %}
                     <a href="{% url 'blog:blog_update' object.slug %}" class="btn btn-warning">Изменить
                         запись</a>
@@ -78,5 +104,56 @@
             transform: translateY(-1px);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
+        .comment-section {
+            border: 1px solid #ccc; /* Рамка вокруг секции комментариев */
+            border-radius: 5px;
+            padding: 10px;
+            max-height: 300px; /* Максимальная высота секции, добавляет прокрутку при необходимости */
+            overflow-y: auto; /* Включает вертикальную прокрутку при необходимости */
+        }
+        .comments-container {
+            max-height: 100%; /* Занимает максимально доступное пространство */
+            padding: 10px;
+        }
+
+        .comment {
+            border: 1px solid #ddd; /* Рамка вокруг каждого комментария */
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 10px;
+            background-color: #eedabe; /* Фон комментария */
+        }
+        .comment-form {
+            max-width: 600px; /* Устанавливаем максимальную ширину формы */
+            margin: 0 auto; /* Центрируем форму на странице */
+            padding: 10px;
+            background-color: #f9f9f9; /* Фон формы */
+            border: 1px solid #ccc; /* Рамка вокруг формы */
+            border-radius: 5px; /* Закругляем углы */
+        }
+
+        .comment-input {
+            width: 100%; /* Занимаем всю доступную ширину */
+            box-sizing: border-box; /* Включаем padding и border в расчет ширины */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc; /* Рамка вокруг textarea */
+            border-radius: 5px; /* Закругляем углы */
+        }
+
+        .comment-submit {
+            padding: 10px 20px;
+            background-color: #007bff; /* Цвет кнопки */
+            color: #fff; /* Цвет текста кнопки */
+            border: none;
+            border-radius: 5px; /* Закругляем углы */
+            cursor: pointer;
+        }
+
+        .comment-submit:hover {
+            background-color: #0056b3; /* Цвет кнопки при наведении */
+        }
+
+
     </style>
 {% endblock %}

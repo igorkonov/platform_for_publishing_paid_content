@@ -1,11 +1,13 @@
-from django.contrib.auth.decorators import permission_required
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView, FormView
 
-from blog.forms import BlogForm
-from blog.models import Blog
+from blog.forms import BlogForm, CommentForm
+from blog.models import Blog, Comment
 from subscriptions.models import Subscription
 
 
@@ -74,6 +76,8 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 # Обобщенное представление для просмотра деталей объекта модели Blog
 class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
+    form_class = CommentForm
+    template_name = 'blog/blog_detail.html'
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
@@ -81,6 +85,23 @@ class BlogDetailView(LoginRequiredMixin, DetailView):
         obj.save()
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(blog=self.object)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment_content = form.cleaned_data['comment']
+            comment = Comment.objects.create(user=request.user, comment=comment_content)
+
+            blog = self.get_object()
+            blog.comments.add(comment)
+            blog.save()
+
+        return HttpResponseRedirect(self.request.path_info)
 
 # Обобщенное представление для обновления объекта модели Blog
 class BlogUpdateView(LoginRequiredMixin, UpdateView):

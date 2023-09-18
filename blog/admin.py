@@ -1,12 +1,12 @@
 from django.contrib import admin
 
 from blog.forms import BlogAdminForm
-from blog.models import Blog
+from blog.models import Blog, Comment
 
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'slug', 'description', 'image', 'published_on', 'user', 'price', 'comment',)
+    list_display = ('id', 'title', 'slug', 'description', 'image', 'published_on', 'user', 'price',)
     prepopulated_fields = {"slug": ("title",)}
     form = BlogAdminForm
 
@@ -16,3 +16,7 @@ class BlogAdmin(admin.ModelAdmin):
 
     republish.short_description = "Повторная публикация выбранных записей"
     actions = [republish]
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'comment', 'user',)

@@ -1,6 +1,6 @@
 from django import forms
 
-from blog.models import Blog
+from blog.models import Blog, Comment
 
 
 class StyleFormMixin:
@@ -15,10 +15,15 @@ class BlogForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Blog
         fields = '__all__'
-        exclude = ('slug', 'views', 'user', 'comment')
+        exclude = ('slug', 'views', 'user', 'comments')
 
 
 class BlogAdminForm(forms.ModelForm):
     class Meta:
         model = Blog
-        exclude = ['comment']
+        exclude = ['comments']
+
+class CommentForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']

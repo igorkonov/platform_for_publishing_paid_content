@@ -3,8 +3,19 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from transliterate import translit
+
 # Create your models here.
 NULLABLE = {'blank': True, 'null': True}
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,  verbose_name='Пользователь')
+    comment = models.TextField(verbose_name='Коммент')
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name='Время отправки комментария')
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
 
 class Blog(models.Model):
@@ -19,7 +30,7 @@ class Blog(models.Model):
                              verbose_name='Автор контента')
     price = models.IntegerField(default=0, verbose_name='Стоимость подписки')
     is_paid = models.BooleanField(default=False, verbose_name='Платный контент')
-    comment = models.TextField(verbose_name='Комментарий')
+    comments = models.ManyToManyField(Comment, blank=True, verbose_name='Комментарии')
 
     class Meta:
         verbose_name = 'Контент'
