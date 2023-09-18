@@ -2,9 +2,6 @@ from django import forms
 from django.contrib.auth.forms import UsernameField, UserChangeForm, UserCreationForm, AuthenticationForm, \
     PasswordResetForm, SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import EmailMultiAlternatives
-from django.template import loader
-from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
@@ -45,7 +42,7 @@ class CustomUserRegisterForm(StyleFormMixin, UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.username = self.cleaned_data["phone"]
+        user.phone = self.cleaned_data["phone"]
         if commit:
             user.save()
         return user
