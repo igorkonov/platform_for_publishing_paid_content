@@ -35,7 +35,6 @@ class HomePageView(TemplateView):
 
         return context_data
 
-
 # Обобщенное представление для просмотра списка объектов модели Blog
 class BlogListView(ListView):
     model = Blog
@@ -53,13 +52,6 @@ class BlogListView(ListView):
 
         return unsubscribed_blogs
 
-
-
-
-
-
-
-# Обобщенное представление для создания нового объекта модели Blog
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
     form_class = BlogForm
