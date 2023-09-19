@@ -1,17 +1,23 @@
-
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, UserManager as BaseUserManager
 from django.db import models
-
 from blog.models import NULLABLE
 
 
 class UserManager(BaseUserManager):
+    """
+        Кастомный менеджер пользователей.
+
+        Methods:
+            _create_user(phone, password, **extra_fields): Создает и сохраняет пользователя.
+            create_superuser(phone, password, **extra_fields): Создает и сохраняет суперпользователя.
+    """
+
     use_in_migrations = True
 
     def _create_user(self, phone, password, **extra_fields):
         """
-        Create and save a user with the given username, email, and password.
+            Создает и сохраняет пользователя с указанным номером телефона и паролем.
         """
         if not phone:
             raise ValueError("The given phone number must be set")
@@ -21,6 +27,9 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, phone=None, password=None, **extra_fields):
+        """
+            Создает и сохраняет суперпользователя с указанным номером телефона и паролем.
+        """
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -33,6 +42,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    """
+       Модель пользователя.
+    """
     username = models.CharField(max_length=50, unique=True, **NULLABLE, verbose_name='Никнейм')
     phone = models.CharField(max_length=25, unique=True, verbose_name='Номер телефона')
     avatar = models.ImageField(upload_to='users/', verbose_name='Аватар', **NULLABLE)

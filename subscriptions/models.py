@@ -1,12 +1,12 @@
 from django.db import models
-
 from blog.models import Blog, NULLABLE
-
 from users.models import User
 
 
-# Create your models here.
 class Subscription(models.Model):
+    """
+        Модель подписки пользователя на блог.
+    """
     blog = models.ForeignKey(Blog, related_name='subscriptions', on_delete=models.CASCADE, verbose_name='Контент')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     status = models.BooleanField(default=False, verbose_name='Статус подписки')

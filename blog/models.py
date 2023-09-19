@@ -4,12 +4,14 @@ from django.urls import reverse
 from django.utils.text import slugify
 from transliterate import translit
 
-# Create your models here.
 NULLABLE = {'blank': True, 'null': True}
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,  verbose_name='Пользователь')
+    """
+        Модель для хранения комментариев к блогам.
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     comment = models.TextField(verbose_name='Коммент')
     created_date = models.DateTimeField(auto_now_add=True, verbose_name='Время отправки комментария')
 
@@ -17,8 +19,14 @@ class Comment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
+    def __str__(self):
+        return self.comment
+
 
 class Blog(models.Model):
+    """
+        Модель для представления контента блога.
+    """
     title = models.CharField(max_length=150, verbose_name='Заголовок')
     slug = models.SlugField(max_length=150, unique=True, verbose_name='Slug')
     description = models.TextField(verbose_name='Описание контента')
@@ -39,18 +47,31 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('blog:blog_detail', kwargs={'slug': self.slug})
-
-    def toggle_published(self):
-        self.published_on = not self.published_on
-        self.save()
-
     def save(self, *args, **kwargs):
+        """
+            Переопределение метода сохранения объекта.
+            Если у объекта нет slug, то генерируется транслитерированный slug из заголовка.
+        """
         if not self.slug:
             transliterated_title = translit(self.title, 'ru', reversed=True)
             self.slug = slugify(transliterated_title, allow_unicode=True)
         super().save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        """
+            Возвращает абсолютный URL для просмотра объекта.
+        """
+        return reverse('blog:blog_detail', kwargs={'slug': self.slug})
+
+    def toggle_published(self):
+        """
+            Переключает признак публикации блога.
+        """
+        self.published_on = not self.published_on
+        self.save()
+
     def get_display_price(self):
+        """
+            Возвращает цену в формате с двумя десятичными знаками.
+        """
         return "{0:.2f}".format(self.price / 100)

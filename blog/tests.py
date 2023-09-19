@@ -1,8 +1,6 @@
 from django.urls import reverse
-
 from blog.forms import BlogForm
 from blog.models import Blog, Comment
-from subscriptions.models import Subscription
 from users.tests import SetupTestCase
 
 
@@ -28,6 +26,7 @@ class BlogModelTest(SetupTestCase):
         blog = Blog.objects.create(title='Test Blog')
         self.assertEqual(blog.slug, 'test-blog')
 
+
 class BlogListViewTest(SetupTestCase):
 
     def test_blog_list_view(self):
@@ -40,6 +39,7 @@ class BlogListViewTest(SetupTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'blog/blog_list.html')
 
+
 class BlogDetailViewTest(SetupTestCase):
 
     def test_blog_detail_view(self):
@@ -49,6 +49,7 @@ class BlogDetailViewTest(SetupTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'blog/blog_detail.html')
+
 
 class BlogFormTest(SetupTestCase):
 
@@ -65,6 +66,7 @@ class BlogFormTest(SetupTestCase):
         form = BlogForm(data={})
         self.assertFalse(form.is_valid())
 
+
 class CommentCreationTest(SetupTestCase):
     def setUp(self):
         super().setUp()
@@ -74,18 +76,15 @@ class CommentCreationTest(SetupTestCase):
     def test_comment_creation_authenticated_user(self):
         self.client.login(phone='123456789', password='testpass123')
         response = self.client.post(self.url, {'comment': 'Test Comment'})
-        self.assertEqual(response.status_code, 302)  # Assuming a redirect after successful comment creation
+        self.assertEqual(response.status_code, 302)
 
-        # Check if the comment was created and associated with the correct blog
         self.assertEqual(Comment.objects.count(), 1)
         comment = Comment.objects.first()
         self.assertEqual(comment.comment, 'Test Comment')
 
     def test_comment_creation_unauthenticated_user(self):
         response = self.client.post(self.url, {'comment': 'Test Comment'})
-        self.assertEqual(response.status_code, 302)  # Assuming a redirect to login page for unauthenticated users
-
-        # Check that no comment was created
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(Comment.objects.count(), 0)
 
 
@@ -122,6 +121,7 @@ class BlogUpdateViewTest(SetupTestCase):
         self.assertEqual(updated_blog.title, 'Test Blog')
         self.assertEqual(updated_blog.description, 'Test Description')
 
+
 class BlogDeleteViewTest(SetupTestCase):
 
     def setUp(self):
@@ -133,8 +133,6 @@ class BlogDeleteViewTest(SetupTestCase):
         self.client.login(phone='123456789', password='testpass123')
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, 302)
-
-        # Check if the blog was deleted
         self.assertFalse(Blog.objects.filter(pk=self.blog.pk).exists())
 
     def test_blog_delete_view_unauthenticated_user(self):

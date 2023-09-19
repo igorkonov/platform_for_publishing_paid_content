@@ -1,9 +1,7 @@
 import os
-
 import django
 from django.test import TestCase
 from django.urls import reverse
-
 from users.forms import CustomPasswordResetForm
 from users.models import User
 
@@ -25,8 +23,6 @@ class SetupTestCase(TestCase):
         self.user.set_password('testpass123')
         self.user.save()
 
-# tests/test_models.py
-
 
 class UserModelTest(SetupTestCase):
 
@@ -40,9 +36,6 @@ class UserModelTest(SetupTestCase):
     def test_check_password(self):
         user = User.objects.get(phone='123456789')
         self.assertTrue(user.check_password('testpass123'))
-
-
-# tests/test_views.py
 
 
 class LoginViewTest(SetupTestCase):
@@ -74,7 +67,7 @@ class ProfileUpdateViewTest(SetupTestCase):
     def test_profile_update_view_requires_login(self):
         self.client.logout()
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)  # Должен перенаправить на страницу входа
+        self.assertEqual(response.status_code, 302)
 
     def test_profile_update_view_updates_profile(self):
         data = {
@@ -111,8 +104,6 @@ class CustomPasswordResetFormTest(SetupTestCase):
         self.assertFalse(form.is_valid())
 
 
-# tests/test_views.py
-
 class CustomPasswordResetViewTest(SetupTestCase):
 
     def test_password_reset_view(self):
@@ -127,17 +118,17 @@ class CustomPasswordResetViewTest(SetupTestCase):
             'phone': '123456789',
         }
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 302)  # Перенаправляется после успешного сброса пароля
+        self.assertEqual(response.status_code, 302)
 
     def test_password_reset_confirm_view(self):
-        # Создайте URL для сброса пароля с помощью reverse
+
         uid = 'uid'
         token = 'token'
         url = reverse('users:password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)  # Проверьте, что страница сброса пароля открывается
+        self.assertEqual(response.status_code, 200)
 
     def test_password_reset_complete_view(self):
         url = reverse('users:password_reset_complete')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)  # Проверьте, что страница сброса завершена открывается
+        self.assertEqual(response.status_code, 200)

@@ -5,12 +5,20 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
-
 from blog.forms import StyleFormMixin
 from users.models import User
 
 
 class CustomUserChangeForm(StyleFormMixin, UserChangeForm):
+    """
+        Переопределенная форма для изменения данных пользователя.
+
+        Attributes:
+            model (User): Модель пользователя.
+            fields (tuple): Поля формы (номер телефона, аватар).
+            field_classes (dict): Классы полей (номер телефона).
+    """
+
     class Meta:
         model = User
         fields = ('phone', 'avatar')
@@ -23,6 +31,12 @@ class CustomUserChangeForm(StyleFormMixin, UserChangeForm):
 
 
 class CustomUserRegisterForm(StyleFormMixin, UserCreationForm):
+    """
+        Переопределенная форма для регистрации пользователя.
+
+        Attributes:
+            phone (CharField): Поле для ввода номера телефона.
+    """
     phone = forms.CharField(
         max_length=25,
         required=True,
@@ -35,12 +49,19 @@ class CustomUserRegisterForm(StyleFormMixin, UserCreationForm):
         fields = ('phone', 'password1', 'password2')
 
     def clean_phone(self):
+        """
+            Проверка номера телефона на уникальность.
+        """
         phone = self.cleaned_data.get('phone')
         if User.objects.filter(phone=phone).exists():
             raise forms.ValidationError("Пользователь с таким номером уже существует")
         return phone
 
     def save(self, commit=True):
+        """
+            Сохранение пользователя.
+        """
+
         user = super().save(commit=False)
         user.phone = self.cleaned_data["phone"]
         if commit:
@@ -49,6 +70,13 @@ class CustomUserRegisterForm(StyleFormMixin, UserCreationForm):
 
 
 class CustomAuthenticationForm(StyleFormMixin, AuthenticationForm):
+    """
+        Переопределенная форма аутентификации.
+
+        Attributes:
+            username (CharField): Поле для ввода номера телефона.
+    """
+
     class Meta:
         model = User
 
@@ -61,9 +89,17 @@ class CustomAuthenticationForm(StyleFormMixin, AuthenticationForm):
 
 
 class CustomPasswordResetForm(StyleFormMixin, PasswordResetForm):
-    email = forms.EmailField(  # Оставьте это поле, но скройте его в форме
+    """
+        Переопределенная форма сброса пароля.
+
+        Attributes:
+            email (EmailField): Поле для ввода email (скрытое).
+            phone (CharField): Поле для ввода номера телефона.
+    """
+
+    email = forms.EmailField(
         widget=forms.HiddenInput(),
-        required=False,  # Сделайте его необязательным
+        required=False,
     )
 
     phone = forms.CharField(
@@ -73,12 +109,20 @@ class CustomPasswordResetForm(StyleFormMixin, PasswordResetForm):
     )
 
     def clean_phone(self):
+        """
+            Проверка номера телефона на существование.
+        """
+
         phone = self.cleaned_data.get('phone')
         if not User.objects.filter(phone=phone).exists():
             raise forms.ValidationError("Пользователь с таким номером не найден")
         return phone
 
     def save(self, request, **kwargs):
+        """
+           Сохранение токена сброса пароля.
+        """
+
         phone = self.cleaned_data["phone"]
         user = User.objects.get(phone=phone)
 
@@ -91,5 +135,8 @@ class CustomPasswordResetForm(StyleFormMixin, PasswordResetForm):
 
 
 class CustomResetConfirmForm(SetPasswordForm):
+    """
+       Переопределенная форма подтверждения сброса пароля.
+    """
     class Meta:
         model = User
