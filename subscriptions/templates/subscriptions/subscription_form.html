@@ -1,0 +1,97 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-sm-12 col-md-8 col-lg-12">
+            <div class="card shadow-sm my-4">
+                <div class="card-header text-center">
+                    <h4 class="card-title">Подписка на блог "{{blog.title}}"</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.as_p }}
+                        </div>
+                        <div class="form-group text-center">
+                            <a href="{% url 'blog:home' %}"
+                               class="btn btn-secondary mt-3">Отменить</a>
+                            <button class="btn btn-success mt-3" type="submit">Подписаться</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 2px 4px rgba(0, 0, 0, 0.3);
+        width: 100%;
+
+    }
+
+    .card-body form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+        text-align: left;
+        padding: 0 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    .form-group input[type="time"],
+    .form-group input[type="text"],
+    .form-group input[type="text"],
+    .form-group input[type="text"],
+    .form-group input[type="email"] {
+        padding: 0.5rem;
+        border: none;
+        border-radius: 5px;
+        background-color: #f1f1f1;
+        margin-bottom: 0.5rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-group input[type="time"]:focus,
+    .form-group input[type="text"]:focus,
+    .form-group input[type="text"]:focus,
+    .form-group input[type="text"]:focus,
+    .form-group input[type="email"]:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+</style>
+{% endblock %}

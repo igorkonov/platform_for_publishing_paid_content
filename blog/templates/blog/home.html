@@ -1,0 +1,134 @@
+{% extends 'blog/base.html' %}
+{% load tags %}
+{% block content %}
+<body>
+<div class="container-h text-center my-5 py-5">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header bg-dark text-white">
+                    <h1 class="font-weight-normal">Cервис контента</h1>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <h1>Статьи</h1>
+
+    <div class="container">
+        <div class="row">
+            {% for item in blog %}
+            {% if item.published_on %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <h3 class="card-header bg-dark">
+                        {% if item in subscribed_blogs or item.user == user %}
+                        <a href="{% url 'blog:blog_detail' item.slug %}"
+                           style="color: white; margin: 0;">{{item.title}}</a>
+                        {% else %}
+                        <a href="#" style="color: white; margin: 0;">{{item.title}}</a>
+                        {% endif %}
+                    </h3>
+
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.description | truncatechars:100 }}</h5>
+
+                        {% if user.is_authenticated and item in subscribed_blogs or item.user == user %}
+                        <img src="{% mediapath item.image %}"
+                             class="card-img-top mx-auto d-block img-fluid" alt=""
+                             style="width: auto; height: auto;">
+                        {% else %}
+                        <div style="filter: blur(30px);">
+                            <img src="{% mediapath item.image %}"
+                                 class="card-img-top mx-auto d-block img-fluid" alt=""
+                                 style="width: auto; height: auto;">
+                        </div>
+
+                        {% endif %}
+
+
+                        <h1 class="card-title pricing-card-title">{{ item.price }} $.</h1>
+                        {% if user.is_authenticated %}
+                            {% if item.user != user %}
+                                {% if item in subscribed_blogs %}
+                                    <a href="{% url 'subscriptions:subscription_delete' item.slug %}" class="btn btn-danger btn-sm">Отписаться</a>
+                                {% elif item in unsubscribed_blogs %}
+                                    {% if item.is_paid or item.price > 0 %}
+                                        <form action="{% url 'subscriptions:create-checkout-session' item.slug %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="submit" class="btn btn-success btn-sm" value="Подписаться {{ item.price }} $">
+                                        </form>
+                                    {% else %}
+                                        <a href="{% url 'subscriptions:subscription_create' item.slug %}" class="btn btn-success btn-sm">Подписаться</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+
+
+
+                        <ul>
+                            <li><a class="card-text">Просмотры: {{item.views}}</a></li>
+                            <li><p class="card-text">Дата публикации: {{ item.created_date }}</p></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    .btn {
+        margin-top: 5px;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .container-h {
+        background-color: #f7f7f7;
+        border: 1px solid #ddd;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .card-header h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+    }
+
+    .card-body {
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+
+    ul li {
+        margin-bottom: 0.5rem;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}

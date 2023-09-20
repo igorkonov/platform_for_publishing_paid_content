@@ -1,0 +1,332 @@
+[
+{
+  "model": "sessions.session",
+  "pk": "6obzuaivjxuwc57ufav91edmhwwn324l",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAcmQFcuvcMZGCoVA1NSrsy3l2bdKHb_977LxV5XWpce5njKOqsSB1-t8T5UdoG5M7tNuk8tWUek94UvdOur5OU52V3_w4q9_qtndjkTyYgW_DsybmCBBCcseTFBEAfEgIPBITJW8kDGBJ7dIhGsKj3B6tDNnE:1qidcC:LkroSdZzjBlxhfYTIfdKFl7MlIHhOG3Rw6h7Nx7jKjY",
+    "expire_date": "2023-10-03T16:30:20.003Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "uliez5pe4im6e8y1nzp62p92h1jw71o4",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP-FsyGgPD167zc0LLsrVQNJaU_GfzckPeh1ZjJvMad9K_PeaZ0XFFdhxOmXQcpPqkPgI9V7k7nVbV1AjkQetsupIb1uR_s3KKmXsfUaYsDIZySNSEaxUjkzOMMYTNYOyOVojbYWUStKrHz0YMMFyRsWny8DvDii:1qhUii:xFLPyoGcSNdX0nJ8710kKnt4FltabBVMTTZeKQZFA84",
+    "expire_date": "2023-09-30T12:48:20.777Z"
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": 54,
+  "fields": {
+    "user": 1,
+    "comment": "Жду ваших комментарий к этому посту! )",
+    "created_date": "2023-09-17T20:44:46.017Z"
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": 55,
+  "fields": {
+    "user": 4,
+    "comment": "Очень клева! Мне нрав!",
+    "created_date": "2023-09-17T20:45:21.698Z"
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": 56,
+  "fields": {
+    "user": 2,
+    "comment": "Ну как вам? Ржака же :D!",
+    "created_date": "2023-09-17T20:50:48.563Z"
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": 57,
+  "fields": {
+    "user": 2,
+    "comment": "оооо хочууу себе такую!! Для доты самое то!",
+    "created_date": "2023-09-17T20:51:28.133Z"
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": 58,
+  "fields": {
+    "user": 4,
+    "comment": "Даа!!! На ней даже тетрис можно запустить!",
+    "created_date": "2023-09-17T20:53:36.603Z"
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": 59,
+  "fields": {
+    "user": 4,
+    "comment": "вжжж вжжж кожаные ублюдки!!!",
+    "created_date": "2023-09-17T20:54:20.850Z"
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": 60,
+  "fields": {
+    "user": 1,
+    "comment": "ОСТАНОВИСЬЬЬ ПОЖАЛУЙСТА!!!!!",
+    "created_date": "2023-09-17T20:55:03.698Z"
+  }
+},
+{
+  "model": "blog.blog",
+  "pk": 1,
+  "fields": {
+    "title": "Кошки",
+    "slug": "koshki",
+    "description": "Психология кошек",
+    "image": "blog/photo_2023-06-19_12-09-35.jpg",
+    "created_date": "2023-09-04",
+    "views": 25,
+    "published_on": true,
+    "user": 1,
+    "price": 20,
+    "is_paid": true,
+    "comments": []
+  }
+},
+{
+  "model": "blog.blog",
+  "pk": 2,
+  "fields": {
+    "title": "Человек-паук",
+    "slug": "chelovek-pauk",
+    "description": "Мини статейка о дружелюбном соседе)",
+    "image": "blog/d75676094164u_1.jpg",
+    "created_date": "2023-09-05",
+    "views": 253,
+    "published_on": true,
+    "user": 1,
+    "price": 0,
+    "is_paid": false,
+    "comments": [
+      54,
+      55
+    ]
+  }
+},
+{
+  "model": "blog.blog",
+  "pk": 3,
+  "fields": {
+    "title": "Ультра пылесос",
+    "slug": "ultra-pylesos",
+    "description": "Все о пылесосе",
+    "image": "blog/c7778fcf982b8612c48da836b8d4dc9a.jpg",
+    "created_date": "2023-09-06",
+    "views": 24,
+    "published_on": true,
+    "user": 1,
+    "price": 30,
+    "is_paid": true,
+    "comments": [
+      59,
+      60
+    ]
+  }
+},
+{
+  "model": "blog.blog",
+  "pk": 4,
+  "fields": {
+    "title": "Видеокарта",
+    "slug": "videokarta",
+    "description": "Самая лучшая видео карта!",
+    "image": "blog/videokarta_asus_geforce_rtx_4090_rog_strix_gaming_oc_24g_2352915_8.jpg",
+    "created_date": "2023-09-13",
+    "views": 33,
+    "published_on": true,
+    "user": 4,
+    "price": 0,
+    "is_paid": false,
+    "comments": [
+      57,
+      58
+    ]
+  }
+},
+{
+  "model": "blog.blog",
+  "pk": 6,
+  "fields": {
+    "title": "MEM",
+    "slug": "mem",
+    "description": "Смешные картинки...................",
+    "image": "blog/1F3954DF-847E-4EAA-92D9-CA2370CC3FEC.png",
+    "created_date": "2023-09-17",
+    "views": 3,
+    "published_on": true,
+    "user": 2,
+    "price": 10,
+    "is_paid": true,
+    "comments": [
+      56
+    ]
+  }
+},
+{
+  "model": "users.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$GjVQUL2pvBoB9Y3rspGme7$1moOaVqJk1KEymysrtF9uyp4L5lLDhGLcMVnddyRC5k=",
+    "last_login": "2023-09-17T20:54:30.816Z",
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2023-09-04T12:43:36.756Z",
+    "username": "igor",
+    "phone": "89623701887",
+    "avatar": "users/d75676094164u_1.jpg",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$nDiZ2lr7ttsxzTMFfdVBvP$num1LumXzBmO2pY6I6bjMqyluz3i46eJMnpeILOAoFM=",
+    "last_login": "2023-09-17T20:45:47.176Z",
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2023-09-13T17:04:55.534Z",
+    "username": "maria",
+    "phone": "89208983381",
+    "avatar": "users/Лужнецкая_набережная_после_реконструкции_сентябрь_2016.jpg",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$eqIIgZ7Ep9v1SlGtOOFf5g$IAhJ3UZESazX0HPzmKYr2vAno0wzIg2UJe+d3oT+gP0=",
+    "last_login": "2023-09-18T15:04:44.514Z",
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2023-09-13T18:36:03.813Z",
+    "username": "noname",
+    "phone": "1234567890",
+    "avatar": "users/orig.webp",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$aGXhzI39gDLfvMHVsxQkWj$PVxU30tGwj8wx1JjgUTAV1Hq+ZCwxi15vr/vGMlifhQ=",
+    "last_login": "2023-09-18T14:11:59.467Z",
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2023-09-17T22:40:34.828Z",
+    "username": "+7(962)370-18-87",
+    "phone": "+7(962)370-18-87",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$904QWE0cBRjvdB4t1WzVwp$yOupCuoiqMeBZ9B2ku/IYOL4yKfTQClryd+tp2OskKw=",
+    "last_login": "2023-09-19T16:30:19.995Z",
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2023-09-18T14:12:48.044Z",
+    "username": "7657567757",
+    "phone": "7657567757",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "subscriptions.subscription",
+  "pk": 22,
+  "fields": {
+    "blog": 2,
+    "user": 4,
+    "status": true,
+    "payment_status": true,
+    "payment_date": "2023-09-16"
+  }
+},
+{
+  "model": "subscriptions.subscription",
+  "pk": 24,
+  "fields": {
+    "blog": 4,
+    "user": 1,
+    "status": true,
+    "payment_status": true,
+    "payment_date": "2023-09-16"
+  }
+},
+{
+  "model": "subscriptions.subscription",
+  "pk": 25,
+  "fields": {
+    "blog": 3,
+    "user": 4,
+    "status": true,
+    "payment_status": true,
+    "payment_date": "2023-09-16"
+  }
+},
+{
+  "model": "subscriptions.subscription",
+  "pk": 26,
+  "fields": {
+    "blog": 4,
+    "user": 2,
+    "status": true,
+    "payment_status": true,
+    "payment_date": "2023-09-17"
+  }
+},
+{
+  "model": "subscriptions.subscription",
+  "pk": 27,
+  "fields": {
+    "blog": 1,
+    "user": 6,
+    "status": true,
+    "payment_status": true,
+    "payment_date": "2023-09-19"
+  }
+}
+]

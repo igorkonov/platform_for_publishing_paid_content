@@ -1,0 +1,68 @@
+version: '3.7'
+
+services:
+  blog_db:
+    restart: always
+    image: postgres
+    user: postgres
+    container_name: blog_db
+    env_file:
+      - .env.docker
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis_blog:
+    image: redis:7.0.2-alpine
+    container_name: redis_blog
+    command: redis-server --save 20 1 --loglevel warning
+    ports:
+      - "6379:6379"
+
+  app_blog:
+    build: .
+    container_name: app_blog
+    depends_on:
+      blog_db:
+        condition: service_healthy
+      redis_blog:
+        condition: service_started
+    env_file:
+      - .env.docker
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/app
+      - ./static:/app/static
+      - ./media:/app/media
+    command: >
+      bash -c "python manage.py makemigrations
+      && python manage.py migrate
+      && python manage.py fill
+      && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+
+
+  nginx_blog:
+    build: ./nginx
+    container_name: nginx
+    depends_on:
+      - app_blog
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./static:/static
+      - ./media:/media
+
+
+volumes:
+  pg_data:
+  static:
+  media:

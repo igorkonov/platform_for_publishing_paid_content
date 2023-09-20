@@ -1,0 +1,106 @@
+<div class="container-fluid text-center py-3">
+    <a class="btn" style="font-size: 25px; color: black; text-shadow: #1b1b1b;" href="{% url 'blog:home' %}">Платформа для публикации контента</a>
+</div>
+<div class="col d-flex justify-content-start">
+    {% if user.is_authenticated %}
+         <a class="p-2 btn btn-outline-dark" href="{% url 'users:profile' %}">
+             {% if user.avatar %}
+             <img src="{{ user.avatar.url }}" alt="Avatar" style="width: 30px; height: 30px; border-radius: 50%;">
+             {% endif %}
+            Профиль
+        </a>
+    <a class="p-2 btn btn-outline-dark" href="{% url 'users:logout' %}">Выйти</a>
+    {% else %}
+        <a class="p-2 btn btn-outline-dark" href="{% url 'users:register' %}">Регистрация</a>
+    <a class="p-2 btn btn-outline-dark" href="{% url 'users:login' %}">Войти</a>
+    {% endif %}
+
+</div>
+
+<div class="col d-flex justify-content-center align-items-center">
+    <div class="dropdown">
+        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Меню
+        </button>
+         {% if user.is_authenticated %}
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{% url 'blog:blog_list' %}">Блог</a>
+            <a class="dropdown-item" href="{% url 'subscriptions:subscription_list' %}">Подписки</a>
+        </div>
+         {% endif %}
+
+
+
+
+    </div>
+</div>
+
+<div class="col d-flex justify-content-end align-items-center">
+    <a class="text-muted" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-3">
+            <circle cx="10.5" cy="10.5" r="7.5"></circle>
+            <line x1="21" y1="21" x2="15.8" y2="15.8"></line>
+        </svg>
+    </a>
+     {% if user.is_authenticated %}
+    <a class="p-2 btn btn-outline-dark" href="{% url 'blog:blog_list' %}">Блог</a>
+    <a class="p-2 btn btn-outline-dark" href="{% url 'subscriptions:subscription_list' %}">Подписки</a>
+    {% endif %}
+</div>
+
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-toggle {
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        display: inline-block;
+        padding: 10px 20px;
+        cursor: pointer;
+        background-color: #fff;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .dropdown-toggle:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown-toggle:active {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        display: none;
+        float: left;
+        min-width: 10rem;
+        padding: .10rem 10px;
+        margin: .125rem 0 0;
+        font-size: 1rem;
+        color: #212529;
+        text-align: left;
+        list-style: none;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, .15);
+        border-radius: 15px 15px;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        animation: dropdown-fade-in 0.3s ease-in-out forwards;
+    }
+
+</style>
